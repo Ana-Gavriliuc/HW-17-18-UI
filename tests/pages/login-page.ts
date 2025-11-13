@@ -26,6 +26,7 @@ export class LoginPage {
     await this.usernameField.fill(username)
     await this.passwordField.fill(password)
     await this.signInButton.click()
+
     return new OrderPage(this.page)
   }
 
