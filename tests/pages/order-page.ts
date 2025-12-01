@@ -74,4 +74,5 @@ export class OrderPage extends BasePage {
 
     return Number(strArray[strArray.length - 1])
   }
+
 }
