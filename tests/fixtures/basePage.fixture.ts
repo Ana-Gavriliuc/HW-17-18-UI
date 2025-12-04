@@ -1,35 +1,35 @@
-import { test as base, request } from '@playwright/test';
-import { LoginPage } from '../pages/login-page';
+import { test as base, request } from '@playwright/test'
+import { LoginPage } from '../pages/login-page'
 import { OrderPage } from '../pages/order-page'
 import FoundPage from '../pages/found-page'
 import { PASSWORD, USERNAME } from '../../config/env-data'
 
 type ExtendedTest = {
-  loginPage: LoginPage,
-  orderPage: OrderPage,
-  foundPage: FoundPage,
-  auth: {jwt: string},
+  loginPage: LoginPage
+  orderPage: OrderPage
+  foundPage: FoundPage
+  auth: { jwt: string }
   orderId: string
 }
 
 export const test = base.extend<ExtendedTest>({
   loginPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await use(loginPage);
+    const loginPage = new LoginPage(page)
+    await use(loginPage)
   },
   orderPage: async ({ page }, use) => {
-    const orderPage = new OrderPage(page);
-    await use(orderPage);
+    const orderPage = new OrderPage(page)
+    await use(orderPage)
   },
   foundPage: async ({ page }, use) => {
-    const foundPage = new FoundPage(page);
-    await use(foundPage);
+    const foundPage = new FoundPage(page)
+    await use(foundPage)
   },
   auth: async ({ request }, use) => {
     const response = await request.post('https://backend.tallinn-learning.ee/login/student', {
       data: {
         username: USERNAME,
-        password: PASSWORD
+        password: PASSWORD,
       },
     })
     const jwt = await response.text()
@@ -41,11 +41,11 @@ export const test = base.extend<ExtendedTest>({
         status: 'OPEN',
         customerName: 'customerName',
         customerPhone: 'customerPhone',
-        comment: 'comment'
+        comment: 'comment',
       },
       headers: {
         Authorization: `Bearer ${auth.jwt}`,
-        'content-type': 'application/json'
+        'content-type': 'application/json',
       },
     })
 

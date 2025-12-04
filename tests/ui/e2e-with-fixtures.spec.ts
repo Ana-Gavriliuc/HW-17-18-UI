@@ -1,17 +1,17 @@
-import { test } from '../fixtures/basePage.fixture';
+import { test } from '../fixtures/basePage.fixture'
 import { expect } from '@playwright/test'
 
 test.beforeEach(async ({ context, auth, orderPage }) => {
   await context.addInitScript((token) => {
     localStorage.setItem('jwt', token)
-  }, auth.jwt);
+  }, auth.jwt)
   await orderPage.open()
 })
 
 const newOrder = {
   customerName: 'customerName',
   customerPhone: 'customerPhone',
-  comment: 'comment'
+  comment: 'comment',
 }
 
 test('TL-23-1 Create order using fixtures auth', async ({ orderPage }) => {
@@ -24,7 +24,11 @@ test('TL-23-1 Create order using fixtures auth', async ({ orderPage }) => {
   await orderPage.checkElementVisibility(orderPage.successfulCreationPopup)
 })
 
-test('TL-23-2 Find created order using fixtures auth and order create in delivery status', async ({ orderId, orderPage, foundPage }) => {
+test('TL-23-2 Find created order using fixtures auth and order create in delivery status', async ({
+  orderId,
+  orderPage,
+  foundPage,
+}) => {
   await orderPage.statusButton.click()
   await orderPage.fillElement(orderPage.orderIdInputField, orderId)
   const trackOrderResponse = orderPage.page.waitForResponse('**/orders/*')
