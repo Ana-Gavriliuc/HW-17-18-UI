@@ -24,10 +24,12 @@ test('SignIn button enabled when incorrect data inserted', async ({}) => {
 
 test('Incorrect credentials message displayed when incorrect credentials used', async ({}) => {
   await authPage.usernameField.fill(faker.internet.email())
-  await authPage.passwordField.fill(faker.internet.password({
-    length: 10,
-    memorable: false,
-  }))
+  await authPage.passwordField.fill(
+    faker.internet.password({
+      length: 10,
+      memorable: false,
+    }),
+  )
   await expect(authPage.signInButton).toBeEnabled()
   await authPage.signInButton.click()
   await expect(authPage.errorMessagePopup).toBeVisible()
