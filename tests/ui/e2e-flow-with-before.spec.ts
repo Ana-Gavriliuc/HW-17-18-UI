@@ -10,22 +10,32 @@ test.beforeEach(async ({ page }) => {
   await authPage.open()
 })
 
-test('signIn button disabled when incorrect data inserted', async ({}) => {
-  await authPage.usernameField.fill(faker.lorem.word(2))
-  await authPage.passwordField.fill(faker.lorem.word(7))
-  await expect(authPage.signInButton).toBeDisabled()
+test('TL-17-3 Sign In button remains enabled when incorrect data inserted', async ({}) => {
+  await authPage.usernameField.fill(faker.lorem.word(4))
+  await authPage.passwordField.fill(faker.lorem.word(9))
+  await expect(authPage.signInButton).toBeEnabled()
 })
 
-test('error message displayed when incorrect credentials used', async ({}) => {
-  // implement test
-})
-
-test('login with correct credentials and verify order creation page', async ({}) => {
+test('TL-17-4 Log In with correct credentials and verify order creation page', async ({}) => {
   const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
   await expect(orderCreationPage.statusButton).toBeVisible()
-  // verify at least few elements on the order creation page
+  await orderCreationPage.checkInnerComponentsVisible()
 })
 
-test('login and create order', async ({}) => {
-  // implement test
+test('TL-17-5 Log In and create order', async ({ page }) => {
+  const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
+  await orderCreationPage.nameField.fill('Ana')
+  await orderCreationPage.phoneField.fill('20252026')
+  await orderCreationPage.commentField.fill('house')
+  await orderCreationPage.checkCreationPopupVisible(false)
+  await orderCreationPage.createOrderButton.click()
+  await page.waitForTimeout(1000)
+  await orderCreationPage.checkCreationPopupVisible(true)
+})
+
+test('TL-17-6 Log Out from order page', async () => {
+  const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
+  await orderCreationPage.checkInnerComponentsVisible()
+  await orderCreationPage.logoutButton.click()
+  await expect(authPage.signInButton).toBeVisible()
 })
