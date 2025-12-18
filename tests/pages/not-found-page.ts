@@ -1,6 +1,7 @@
 import BasePage from './base-page'
-import { Locator, Page } from '@playwright/test'
 import { SERVICE_URL } from '../../config/env-data'
+import { Locator, Page } from '@playwright/test'
+
 
 export default class NotFoundPage extends BasePage {
   readonly title: Locator

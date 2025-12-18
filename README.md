@@ -19,7 +19,7 @@ Open the `prod.env` file and fill in the following fields with the required conf
 - **URL**: The base URL for the service.
 
 Example:
-```plaintext
+
 TEST_USERNAME=myUsername
 TEST_PASSWORD=myPassword
 URL=https://example.com

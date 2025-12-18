@@ -13,24 +13,36 @@ test.beforeEach(async ({ page }) => {
   await authPage.open()
 })
 
-test('TL-17-3 signIn button disabled when incorrect data inserted', async ({}) => {
-  await authPage.usernameField.fill(faker.lorem.word(2))
-  await authPage.passwordField.fill(faker.lorem.word(7))
+test('SignIn button disabled when incorrect data inserted', async ({}) => {
+  await authPage.usernameField.fill(faker.lorem.word(3))
+  await authPage.passwordField.fill(faker.lorem.word(9))
   await expect(authPage.signInButton).toBeDisabled()
 })
 
-test('TL-17-5 login with correct credentials and verify order creation page', async ({}) => {
+test('Incorrect credentials message displayed when incorrect credentials used', async ({}) => {
+  await authPage.usernameField.fill(faker.internet.email())
+  await authPage.passwordField.fill(faker.internet.password({
+    length: 10,
+    memorable: false,
+  }))
+  await expect(authPage.signInButton).toBeEnabled()
+  await authPage.signInButton.click()
+  await expect(authPage.errorMessagePopup).toBeVisible()
+  await expect(authPage.errorMessagePopup).toContainText('Incorrect credentials')
+})
+
+test('Login with correct credentials and verify order creation page', async ({}) => {
   const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
   await expect(orderCreationPage.statusButton).toBeVisible()
   await orderCreationPage.checkInnerComponentsVisible()
 })
 
-test('TL-17-6 login and create order and check order found page', async ({ page }) => {
+test('Login and create order and check order found page', async ({ page }) => {
   const foundPage = new FoundPage(page)
   const orderInfo = {
-    name: 'order',
-    phoneField: '789789789',
-    comment: 'comment',
+    name: 'Ana',
+    phoneField: '20252026',
+    comment: 'house',
   }
 
   const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
@@ -47,9 +59,16 @@ test('TL-17-6 login and create order and check order found page', async ({ page 
   await foundPage.checkElementVisibility(foundPage.orderName)
 })
 
-test('TL-18-1 Check not found page', async ({ page }) => {
-  const notFoundPage = new NotFoundPage(page, `${SERVICE_URL}/orders/12341234123412341234`)
-  const orderPage = new OrderPage(page)
+test('Logout button', async () => {
+  const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
+  await expect(orderCreationPage.logoutButton).toBeVisible()
+  await orderCreationPage.logoutButton.click()
+  await expect(authPage.signInButton).toBeVisible()
+})
+
+test('Check not found page', async ({ page }) => {
+  const notFoundPage = new NotFoundPage(page, `${SERVICE_URL}/orders/-1`)
+  const orderPage = new OrderPage(page, 'url')
 
   await authPage.signIn(USERNAME, PASSWORD)
   await orderPage.findOrderById(-1)

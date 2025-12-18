@@ -3,7 +3,7 @@ import { LoginPage } from '../pages/login-page'
 import { faker } from '@faker-js/faker/locale/ar'
 import { PASSWORD, USERNAME } from '../../config/env-data'
 
-test('TL-17-1 signIn button disabled when incorrect data inserted', async ({ page }) => {
+test('SignIn button disabled when incorrect data inserted', async ({ page }) => {
   const authPage = new LoginPage(page)
 
   await authPage.open()
@@ -12,7 +12,7 @@ test('TL-17-1 signIn button disabled when incorrect data inserted', async ({ pag
   await expect(authPage.signInButton).toBeDisabled()
 })
 
-test('TL-17-2 login with correct credentials and verify order creation page', async ({ page }) => {
+test('Login with correct credentials and verify order creation page', async ({ page }) => {
   const authPage = new LoginPage(page)
 
   await authPage.open()
