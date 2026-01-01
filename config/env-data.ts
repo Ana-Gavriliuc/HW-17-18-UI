@@ -9,7 +9,7 @@ if (process.env.CI !== 'true') {
 
 const requiredVars = ['URL', 'TEST_USERNAME', 'TEST_PASSWORD']
 
-// Check for missing variables
+
 requiredVars.forEach((varName) => {
   if (!process.env[varName]) {
     throw new Error(`Missing required environment variable: ${varName}`)
